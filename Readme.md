@@ -1,7 +1,7 @@
 # Личный проект «Readme»
 
 * Студент: [Andrey Sviridyuk](https://up.htmlacademy.ru/nodejs-2/2/user/597285).
-* Наставник: `Неизвестно`.
+* Наставник: [Артем Макаров](https://htmlacademy.ru/profile/deepsick).
 
 ---
 
