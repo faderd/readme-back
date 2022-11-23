@@ -1,0 +1,17 @@
+# Create comment
+  POST http://localhost:3335/api/comment HTTP/1.1
+  Content-Type: application/json
+
+  {
+    "postId": "2304023",
+    "text": "Some text"
+  }
+###
+
+# Delete comment
+  DELETE http://localhost:3335/api/comment/fc5a8523-935e-4ea9-a51d-830af8d9a122 HTTP/1.1
+###
+
+# Get comments
+  GET http://localhost:3335/api/comment HTTP/1.1
+###
