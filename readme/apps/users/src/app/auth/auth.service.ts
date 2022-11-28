@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { UserRole } from '@readme/shared-types';
 import dayjs = require('dayjs');
-import { UserMemoryRepository } from '../user/user-memory.repository';
 import { UserEntity } from '../user/user.entity';
+import { UserRepository } from '../user/user.repository';
 import { AUTH_USER_EXISTS, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG } from './auth.constant';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -10,8 +11,9 @@ import { LoginUserDto } from './dto/login-user.dto';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userRepository: UserMemoryRepository
-  ) { }
+    private readonly userRepository: UserRepository,
+  ) {
+  }
 
   async register(dto: CreateUserDto) {
     const { email, firstname, lastname, password } = dto;
