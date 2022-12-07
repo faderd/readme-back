@@ -5,7 +5,7 @@ import { PostEntity } from './post.entity';
 import * as crypto from 'crypto';
 
 @Injectable()
-export class PostMemoryRepository implements CRUDRepositoryInterface<PostEntity, string, PostInterface> {
+export class PostMemoryRepository implements CRUDRepositoryInterface<PostEntity, number, PostInterface> {
   private repository: { [key: string]: PostInterface } = {};
 
   public async create(item: PostEntity): Promise<PostInterface> {
@@ -15,7 +15,7 @@ export class PostMemoryRepository implements CRUDRepositoryInterface<PostEntity,
     return { ...entry };
   }
 
-  public async findById(id: string): Promise<PostInterface> {
+  public async findById(id: number): Promise<PostInterface> {
     if (this.repository[id]) {
       return { ...this.repository[id] };
     }
@@ -27,12 +27,12 @@ export class PostMemoryRepository implements CRUDRepositoryInterface<PostEntity,
     return Object.values(this.repository);
   }
 
-  public async destroy(id: string): Promise<void> {
+  public async destroy(id: number): Promise<void> {
     delete this.repository[id];
   }
 
-  public async update(id: string, item: PostEntity): Promise<PostInterface> {
-    this.repository[id] = { ...item.toObject(), _id: id };
+  public async update(id: number, item: PostEntity): Promise<PostInterface> {
+    this.repository[id] = { ...item.toObject(), id };
     return this.findById(id);
   }
 }

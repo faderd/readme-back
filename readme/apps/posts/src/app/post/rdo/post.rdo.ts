@@ -7,8 +7,8 @@ export class PostRdo {
     description: 'The uniq post ID',
     example: '123',
   })
-  @Expose({ name: '_id' })
-  public id: string;
+  @Expose({ name: 'id' })
+  public id: number;
 
   @ApiProperty({
     description: 'Id of the author of the post',

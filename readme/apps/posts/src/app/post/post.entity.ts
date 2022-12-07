@@ -1,7 +1,8 @@
+import { EntityInterface } from '@readme/core';
 import { PostInterface, PostState, PostType } from '@readme/shared-types';
 
-export class PostEntity implements PostInterface {
-  public _id?: string;
+export class PostEntity implements EntityInterface<PostEntity>, PostInterface {
+  public id: number;
   public authorId: string;
   public datePublication: Date;
   public state: PostState;
@@ -22,26 +23,25 @@ export class PostEntity implements PostInterface {
     this.fillEntity(post);
   }
 
-  public toObject() {
+  public toObject(): PostEntity {
     return { ...this };
   }
 
-  public fillEntity(post: PostInterface) {
-    this._id = post._id;
+  public fillEntity(post: PostInterface): void {
     this.authorId = post.authorId;
     this.datePublication = post.datePublication;
     this.state = post.state;
     this.isRepost = post.isRepost;
     this.type = post.type;
-    this.tags = post.tags;
-    this.title = post.title;
-    this.urlVideo = post.urlVideo;
-    this.announcement = post.announcement;
-    this.postText = post.postText;
-    this.quoteText = post.quoteText;
-    this.quoteAuthor = post.quoteAuthor;
-    this.photo = post.photo;
-    this.link = post.link;
-    this.description = post.description;
+    this.tags = post.tags || [];
+    this.title = post.title || '';
+    this.urlVideo = post.urlVideo || '';
+    this.announcement = post.announcement || '';
+    this.postText = post.postText || '';
+    this.quoteText = post.quoteText || '';
+    this.quoteAuthor = post.quoteAuthor || '';
+    this.photo = post.photo || '';
+    this.link = post.link || '';
+    this.description = post.description || '';
   }
 }
