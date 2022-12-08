@@ -29,8 +29,8 @@ export class PostController {
     status: HttpStatus.OK,
     description: 'Post has been successfully deleted.',
   })
-  async delete(@Param('id') id: string) {
-    return await this.postService.delete(id)
+  async delete(@Param('id') id: number) {
+    return await this.postService.delete(id);
   }
 
   @Patch(':id')
@@ -39,7 +39,7 @@ export class PostController {
     status: HttpStatus.OK,
     description: 'Post has been successfully updated.',
   })
-  async update(@Param('id') id: string, @Body() dto: CreatePostDto) {
+  async update(@Param('id') id: number, @Body() dto: CreatePostDto) {
     const updatedPost = await this.postService.update(id, dto)
     return fillObject(PostRdo, updatedPost);
   }
@@ -52,5 +52,14 @@ export class PostController {
     const posts = await this.postService.getAll();
 
     return posts.map((post) => fillObject(PostRdo, post));
+  }
+
+  @Get(':id')
+  @ApiResponse({
+    type: String,
+    status: HttpStatus.OK,
+  })
+  async findById(@Param('id') id: number) {
+    return await this.postService.getById(id);
   }
 }

@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { UserRole } from '@readme/shared-types';
 import dayjs = require('dayjs');
 import { UserEntity } from '../user/user.entity';

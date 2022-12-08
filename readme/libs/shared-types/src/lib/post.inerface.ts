@@ -2,7 +2,7 @@ import { PostState } from './post-state.enum';
 import { PostType } from './post-type.enum';
 
 export interface PostInterface {
-  _id?: string;
+  id?: number;
   authorId: string;
   datePublication: Date;
   state: PostState;
