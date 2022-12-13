@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { UserRole } from '@readme/shared-types';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { UserInterface, UserRole } from '@readme/shared-types';
 import dayjs = require('dayjs');
 import { UserEntity } from '../user/user.entity';
 import { UserRepository } from '../user/user.repository';
@@ -11,6 +12,7 @@ import { LoginUserDto } from './dto/login-user.dto';
 export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
+    private readonly jwtService: JwtService,
   ) {
   }
 
@@ -41,12 +43,12 @@ export class AuthService {
     const existUser = await this.userRepository.findByEmail(email);
 
     if (!existUser) {
-      throw new Error(AUTH_USER_NOT_FOUND);
+      throw new UnauthorizedException(AUTH_USER_NOT_FOUND);
     }
 
     const blogUserEntity = new UserEntity(existUser);
     if (! await blogUserEntity.comparePassword(password)) {
-      throw new Error(AUTH_USER_PASSWORD_WRONG);
+      throw new UnauthorizedException(AUTH_USER_PASSWORD_WRONG);
     }
 
     return blogUserEntity.toObject();
@@ -54,5 +56,19 @@ export class AuthService {
 
   async getUser(id: string) {
     return this.userRepository.findById(id);
+  }
+
+  async loginUser(user: UserInterface) {
+    const payload = {
+      sub: user._id,
+      email: user.email,
+      role: user.role,
+      lastname: user.lastname,
+      firstname: user.firstname,
+    };
+
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
   }
 }
