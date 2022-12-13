@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreatePostDto } from './dto/create-post.dto';
 import { PostService } from './post.service';
 import { PostRdo } from './rdo/post.rdo';
 import { fillObject } from '@readme/core';
+import { PostQuery } from './query/post.query';
 
 @ApiTags('post')
 @Controller('post')
@@ -29,7 +30,7 @@ export class PostController {
     status: HttpStatus.OK,
     description: 'Post has been successfully deleted.',
   })
-  async delete(@Param('id') id: number) {
+  async delete(@Param('id', ParseIntPipe) id: number) {
     return await this.postService.delete(id);
   }
 
@@ -39,7 +40,7 @@ export class PostController {
     status: HttpStatus.OK,
     description: 'Post has been successfully updated.',
   })
-  async update(@Param('id') id: number, @Body() dto: CreatePostDto) {
+  async update(@Param('id', ParseIntPipe) id: number, @Body() dto: CreatePostDto) {
     const updatedPost = await this.postService.update(id, dto)
     return fillObject(PostRdo, updatedPost);
   }
@@ -48,8 +49,8 @@ export class PostController {
   @ApiResponse({
     status: HttpStatus.OK
   })
-  async getAll() {
-    const posts = await this.postService.getAll();
+  async getAll(@Query() query: PostQuery) {
+    const posts = await this.postService.getAll(query);
 
     return posts.map((post) => fillObject(PostRdo, post));
   }
@@ -59,7 +60,7 @@ export class PostController {
     type: String,
     status: HttpStatus.OK,
   })
-  async findById(@Param('id') id: number) {
+  async findById(@Param('id', ParseIntPipe) id: number) {
     return await this.postService.getById(id);
   }
 }

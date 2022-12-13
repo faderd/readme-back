@@ -5,6 +5,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { DEFAULT_POST_STATE, POST_NOT_FOUND } from './post.constant';
 import { PostEntity } from './post.entity';
 import { PostRepository } from './post.repository';
+import { PostQuery } from './query/post.query';
 
 @Injectable()
 export class PostService {
@@ -24,8 +25,8 @@ export class PostService {
     return this.postRepository.destroy(id);
   }
 
-  async getAll() {
-    return this.postRepository.findAll();
+  async getAll(query: PostQuery): Promise<PostInterface[]> {
+    return this.postRepository.findAll(query);
   }
 
   async update(id: number, dto: CreatePostDto) {

@@ -4,6 +4,7 @@ import { CRUDRepositoryInterface } from '@readme/core';
 import { PostInterface } from '@readme/shared-types';
 import { PrismaService } from '../prisma/prisma.service';
 import { PostEntity } from './post.entity';
+import { PostQuery } from './query/post.query';
 
 @Injectable()
 export class PostRepository implements CRUDRepositoryInterface<PostEntity, number, PostInterface> {
@@ -33,9 +34,16 @@ export class PostRepository implements CRUDRepositoryInterface<PostEntity, numbe
     }) as Promise<PostInterface>;
   }
 
-  public async findAll(): Promise<PostInterface[]> {
-    console.log(await this.prisma.post.findMany());
-    return this.prisma.post.findMany() as Promise<PostInterface[]>;
+  public async findAll({ limit, sortDirection, page }: PostQuery): Promise<PostInterface[]> {
+    return this.prisma.post.findMany({
+      take: limit,
+      orderBy: [
+        {
+          datePublication: sortDirection
+        }
+      ],
+      skip: page > 0 ? limit * (page - 1) : undefined,
+    }) as Promise<PostInterface[]>;
   }
 
   public async update(id: number, item: PostEntity): Promise<PostInterface> {

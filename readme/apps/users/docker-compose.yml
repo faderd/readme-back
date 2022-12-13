@@ -13,7 +13,7 @@ services:
     volumes:
       - ./db:/data/db
     healthcheck:
-      test: echo 'db.runCommand("ping").ok' | mongo mongo:27017/test --quiet
+      test: echo 'db.runCommand("ping").ok' | mongosh mongo:27017/readme-users --quiet
       interval: 10s
       timeout: 5s
       retries: 5
