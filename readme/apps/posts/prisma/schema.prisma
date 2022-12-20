@@ -15,6 +15,7 @@ model Post {
   id              Int       @id @default(autoincrement())
   authorId        String
   datePublication DateTime  @default(now())
+  dateCreation    DateTime  @default(now())
   state           PostState
   isRepost        Boolean
   type            PostType

@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { PostInterface } from '@readme/shared-types';
+import { PostInterface, PostType } from '@readme/shared-types';
 import dayjs = require('dayjs');
-import { CreatePostDto } from './dto/create-post.dto';
+import { CreatePostLinkDto } from './dto/create-post-link.dto';
+import { CreatePostPhotoDto } from './dto/create-post-photo.dto';
+import { CreatePostQuoteDto } from './dto/create-post-quote.dto';
+import { CreatePostTextDto } from './dto/create-post-text.dto';
+import { CreatePostVideoDto } from './dto/create-post-video.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
 import { DEFAULT_POST_STATE, POST_NOT_FOUND } from './post.constant';
 import { PostEntity } from './post.entity';
 import { PostRepository } from './post.repository';
@@ -13,8 +18,8 @@ export class PostService {
     private readonly postRepository: PostRepository,
   ) { }
 
-  async create(dto: CreatePostDto): Promise<PostInterface> {
-    const post = { ...dto, datePublication: dayjs().toDate(), state: DEFAULT_POST_STATE, isRepost: false, authorId: '' };
+  async create(dto: CreatePostVideoDto | CreatePostTextDto | CreatePostQuoteDto | CreatePostPhotoDto | CreatePostLinkDto, postType: PostType): Promise<PostInterface> {
+    const post = { ...dto, state: DEFAULT_POST_STATE, isRepost: false, authorId: '', type: postType };
 
     const postEntity = new PostEntity(post);
 
@@ -29,8 +34,8 @@ export class PostService {
     return this.postRepository.findAll(query);
   }
 
-  async update(id: number, dto: CreatePostDto) {
-    const { type, tags, title, urlVideo, announcement, postText, quoteText, quoteAuthor, photo, link, description } = dto;
+  async update(id: number, dto: UpdatePostDto) {
+    const { tags, title, urlVideo, announcement, postText, quoteText, quoteAuthor, photo, link, description } = dto;
 
     const existPost = await this.postRepository.findById(id);
 
@@ -38,7 +43,7 @@ export class PostService {
       throw new Error(POST_NOT_FOUND);
     }
 
-    const post = { type, tags, title, urlVideo, announcement, postText, quoteText, quoteAuthor, photo, link, description, datePublication: dayjs().toDate(), state: DEFAULT_POST_STATE, isRepost: false, authorId: '' };
+    const post = { tags, title, urlVideo, announcement, postText, quoteText, quoteAuthor, photo, link, description, datePublication: dayjs().toDate(), state: DEFAULT_POST_STATE, isRepost: false, authorId: '', type: existPost.type };
 
     const postEntity = await new PostEntity(post);
 

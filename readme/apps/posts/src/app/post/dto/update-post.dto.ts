@@ -1,13 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { PostType } from '@readme/shared-types';
 
-export class CreatePostDto {
-  @ApiProperty({
-    description: 'Type of post',
-    example: 'video'
-  })
-  public type: PostType;
-
+export class UpdatePostDto {
   @ApiProperty({
     description: 'Post tags',
     example: ''
