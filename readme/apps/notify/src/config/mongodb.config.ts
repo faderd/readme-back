@@ -1,6 +1,15 @@
-import { ConfigService } from '@nestjs/config';
+import { ConfigService, registerAs } from '@nestjs/config';
 import { MongooseModuleAsyncOptions } from '@nestjs/mongoose';
 import { getMongoConnectionString } from '@readme/core';
+
+export const mongoDbOptions = registerAs('database', () => ({
+  databaseName: process.env.MONGO_DB,
+  host: process.env.MONGO_HOST,
+  port: parseInt(process.env.MONGO_PORT, 10),
+  user: process.env.MONGO_USER,
+  password: process.env.MONGO_PASSWORD,
+  authBase: process.env.MONGO_AUTH_BASE,
+}));
 
 export function getMongoDbConfig(): MongooseModuleAsyncOptions {
   return {
@@ -14,6 +23,6 @@ export function getMongoDbConfig(): MongooseModuleAsyncOptions {
         databaseName: configService.get<string>('database.databaseName'),
       })
     }),
-    inject: [ConfigService],
+    inject: [ConfigService]
   }
 }
