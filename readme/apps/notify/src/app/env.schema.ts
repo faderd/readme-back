@@ -1,6 +1,7 @@
 import * as Joi from 'joi';
 
 const DEFAULT_MONGO_DB_PORT = 27018;
+const DEFAULT_SMTP_PORT = 465;
 
 export default Joi.object({
   MONGO_DB: Joi
@@ -36,4 +37,21 @@ export default Joi.object({
   RABBIT_NOTIFY_SERVICE_QUEUE: Joi
     .string()
     .required(),
+
+  SMTP_HOST: Joi
+    .string()
+    .hostname()
+    .required(),
+  SMTP_PORT: Joi
+    .number()
+    .port()
+    .default(DEFAULT_SMTP_PORT)
+    .required(),
+  SMTP_SECURE: Joi
+    .bool()
+    .default(false),
+  SMTP_USER: Joi
+    .string(),
+  SMTP_PASS: Joi
+    .string(),
 });
