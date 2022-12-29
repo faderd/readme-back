@@ -5,6 +5,7 @@ export class PostEntity implements EntityInterface<PostEntity>, PostInterface {
   public id: number;
   public authorId: string;
   public datePublication: Date;
+  public dateCreation: Date;
   public state: PostState;
   public isRepost: boolean;
   public type: PostType;
@@ -30,6 +31,7 @@ export class PostEntity implements EntityInterface<PostEntity>, PostInterface {
   public fillEntity(post: PostInterface): void {
     this.authorId = post.authorId;
     this.datePublication = new Date();
+    this.dateCreation = new Date();
     this.state = post.state;
     this.isRepost = post.isRepost;
     this.type = post.type;

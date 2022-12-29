@@ -25,6 +25,13 @@ export class PostRdo {
   public datePublication: Date;
 
   @ApiProperty({
+    description: 'Date of creation',
+    example: '2022-11-22T06:36:19.615Z'
+  })
+  @Expose()
+  public dateCreation: Date;
+
+  @ApiProperty({
     description: 'State of post',
     example: 'draft'
   })

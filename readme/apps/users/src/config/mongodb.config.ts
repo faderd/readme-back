@@ -6,7 +6,7 @@ export function getMongoDbConfig(): MongooseModuleAsyncOptions {
   return {
     useFactory: async (configService: ConfigService) => ({
       uri: getMongoConnectionString({
-        usernsme: configService.get<string>('database.user'),
+        username: configService.get<string>('database.user'),
         password: configService.get<string>('database.password'),
         host: configService.get<string>('database.host'),
         port: configService.get<number>('database.port'),

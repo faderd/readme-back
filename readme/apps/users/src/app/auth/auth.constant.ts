@@ -10,3 +10,4 @@ export const AuthUserPasswordLengthRange = {
     MIN: 6,
     MAX: 12,
 }
+export const RABBITMQ_SERVICE_NAME = 'RABBITMQ_SERVICE';
