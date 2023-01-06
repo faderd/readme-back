@@ -9,6 +9,6 @@ export class EmailSenderController {
 
   @Get('/')
   async send() {
-    return this.emailSenderService.sendMail();
+    return this.emailSenderService.sendNotifyAll();
   }
 }

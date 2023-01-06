@@ -6,17 +6,17 @@ import { UserInterface } from '@readme/shared-types';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-    constructor(
-        private readonly configService: ConfigService,
-    ) {
-        super({
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            ignoreExpiration: false,
-            secretOrKey: configService.get<string>('jwt.secret')
-        });
-    }
+  constructor(
+    private readonly configService: ConfigService,
+  ) {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey: configService.get<string>('jwt.secret')
+    });
+  }
 
-    async validate({ email, avatar, role }: Pick<UserInterface, 'email' | 'role' | 'avatar'>) {
-        return { email, avatar, role };
-    }
+  async validate({ email, avatar, role }: Pick<UserInterface, 'email' | 'role' | 'avatar'>) {
+    return { email, avatar, role };
+  }
 }

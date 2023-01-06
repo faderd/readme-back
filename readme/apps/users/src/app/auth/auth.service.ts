@@ -43,8 +43,10 @@ export class AuthService {
     this.rabbitClient.emit(
       createEvent(CommandEvent.AddSubscriber),
       {
-        id: createdUser._id,
+        userId: createdUser._id,
         email: createdUser.email,
+        firstname: createdUser.firstname,
+        lastname: createdUser.lastname
       }
     );
 
