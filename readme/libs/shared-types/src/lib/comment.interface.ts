@@ -1,7 +1,7 @@
 export interface CommentInterface {
-  _id?: string;
+  id?: number;
   authorId: string;
   date: Date;
-  postId: string;
+  postId: number;
   text: string;
 }
