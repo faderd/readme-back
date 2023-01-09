@@ -13,7 +13,7 @@ export class CommentService {
     private readonly postRepository: PostRepository,
   ) { }
 
-  async create(dto: CommentDto) {
+  async create(dto: CommentDto, authorId: string) {
     const { postId, text } = dto;
 
     // Проверим, существует ли пост с таким id
@@ -21,7 +21,7 @@ export class CommentService {
       throw new Error(POST_NOT_EXIST);
     }
 
-    const comment = { authorId: '2j4w', date: dayjs().toDate(), postId: +postId, text };
+    const comment = { authorId: authorId, date: dayjs().toDate(), postId: +postId, text };
 
     const commentEntity = new CommentEntity(comment);
 

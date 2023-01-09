@@ -1,5 +1,6 @@
 # Create comment
   POST http://localhost:3334/api/comment HTTP/1.1
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2I5NzRjNTBkMWFmY2NiYmU1OGZmYWUiLCJlbWFpbCI6InVzZXIxMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwibGFzdG5hbWUiOiJTbWl0aCIsImZpcnN0bmFtZSI6Iktla3MiLCJpYXQiOjE2NzMyNjk4MzIsImV4cCI6MTY3ODQ1MzgzMn0.cvJlQaJzX61jgcEyvvRacpghomvFoT-ONU-PJpgG9jA
   Content-Type: application/json
 
   {

@@ -1,11 +1,10 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { fillObject } from '@readme/core';
+import { fillObject, JwtAuthGuard } from '@readme/core';
 import { MongoidValidationPipe } from '../pipes/mongo-validation.pipe';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LoggedUserRdo } from './rdo/logged-user.rdo';
 import { UserRdo } from './rdo/user.rdo';
 

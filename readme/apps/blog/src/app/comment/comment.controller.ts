@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { fillObject } from '@readme/core';
+import { fillObject, GetUserFromToken, JwtAuthGuard } from '@readme/core';
 import { CommentService } from './comment.service';
 import { CommentDto } from './dto/comment.dto';
 import { CommentRdo } from './rdo/comment.rdo';
@@ -11,14 +11,18 @@ export class CommentController {
     private readonly commentService: CommentService,
   ) { }
 
+  @UseGuards(JwtAuthGuard)
   @Post('/')
   @ApiResponse({
     type: CommentRdo,
     status: HttpStatus.CREATED,
     description: 'The new comment has been successfully created',
   })
-  async create(@Body() dto: CommentDto) {
-    const newComment = await this.commentService.create(dto);
+  async create(
+    @GetUserFromToken('id') userId: string,
+    @Body() dto: CommentDto,
+  ) {
+    const newComment = await this.commentService.create(dto, userId);
     return fillObject(CommentRdo, newComment);
   }
 

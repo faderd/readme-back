@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@readme/config": ["libs/config/src/index.ts"],
       "@readme/core": ["libs/core/src/index.ts"],
       "@readme/shared-types": ["libs/shared-types/src/index.ts"]
     }

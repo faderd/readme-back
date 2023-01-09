@@ -4,6 +4,7 @@ import { CommentModule } from './comment/comment.module';
 import { ConfigModule } from '@nestjs/config';
 import { ENV_FILE_PATH } from './app.constant';
 import { rabbitMqOptions } from '../config/rabbitmq.config';
+import { jwtConfig } from '@readme/config';
 import envSchema from './env.schema';
 
 @Module({
@@ -14,7 +15,7 @@ import envSchema from './env.schema';
       cache: true,
       isGlobal: true,
       envFilePath: ENV_FILE_PATH,
-      load: [rabbitMqOptions],
+      load: [rabbitMqOptions, jwtConfig],
       validationSchema: envSchema,
     }),
   ],

@@ -13,4 +13,8 @@ export default Joi.object({
   RABBIT_USERS_SERVICE_QUEUE: Joi
     .string()
     .required(),
+
+  JWT_SECRET: Joi
+    .string()
+    .required(),
 });
