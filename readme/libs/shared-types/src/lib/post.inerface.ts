@@ -7,9 +7,10 @@ export interface PostInterface {
   datePublication?: Date;
   dateCreation?: Date;
   state: PostState;
-  isRepost: boolean;
+  isRepost: boolean,
+  originalAuthorId?: string,
+  originalPostId?: number,
   type: PostType;
-  tags?: string[];
   title?: string;
   urlVideo?: string;
   announcement?: string;
@@ -19,4 +20,5 @@ export interface PostInterface {
   photo?: string;
   link?: string;
   description?: string;
+  tags?: string[];
 }

@@ -1,10 +1,11 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
-import { ApiResponse } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { fillObject, GetUserFromToken, JwtAuthGuard } from '@readme/core';
 import { CommentService } from './comment.service';
 import { CommentDto } from './dto/comment.dto';
 import { CommentRdo } from './rdo/comment.rdo';
 
+@ApiTags('comment')
 @Controller('comment')
 export class CommentController {
   constructor(

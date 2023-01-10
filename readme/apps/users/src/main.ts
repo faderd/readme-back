@@ -4,10 +4,12 @@
  */
 
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app/app.module';
+import { getRabbitMqConfig } from './config/rabbitmq.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,6 +25,9 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('spec', app, document);
+
+  const configService = app.get<ConfigService>(ConfigService);
+  app.connectMicroservice(getRabbitMqConfig(configService));
 
   app.useGlobalPipes(new ValidationPipe({
     transform: true,

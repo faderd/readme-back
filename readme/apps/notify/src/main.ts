@@ -29,6 +29,9 @@ async function bootstrap() {
   const configService = app.get<ConfigService>(ConfigService);
   app.connectMicroservice(getRabbitMqConfig(configService));
 
+  await app.startAllMicroservices();
+  Logger.log(`🚀 Notify service is running on`);
+
   app.useGlobalPipes(new ValidationPipe({
     transform: true,
   }));
@@ -36,8 +39,7 @@ async function bootstrap() {
   const port = process.env.PORT || 3336;
   await app.listen(port);
 
-  await app.startAllMicroservices()
-  Logger.log(`🚀 Notify service is running on http://localhost:${port}/${globalPrefix}`);
+  Logger.log(`🚀 REST is running on http://localhost:${port}/${globalPrefix}`);
 }
 
 bootstrap();

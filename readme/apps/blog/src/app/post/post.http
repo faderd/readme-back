@@ -1,6 +1,7 @@
 ## Create a new posts
 # Create Video post
 POST http://localhost:3334/api/post/video HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2JkM2ExODIzNmE0YjYzODc4YThhMTgiLCJlbWFpbCI6InVzZXIyMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwibGFzdG5hbWUiOiJTbWl0aCIsImZpcnN0bmFtZSI6Iktla3MiLCJpYXQiOjE2NzMzNDg5ODgsImV4cCI6MTY3ODUzMjk4OH0.PP8myD_K3-YhWMjiw0IbCOdTQ2-285t5iftxHgHJFsU
 Content-Type: application/json
 
 {
@@ -52,13 +53,14 @@ Content-Type: application/json
 
 # Delete post
   DELETE http://localhost:3334/api/post/1 HTTP/1.1
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2JkM2ExYzIzNmE0YjYzODc4YThhMWMiLCJlbWFpbCI6InVzZXIyMUBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwibGFzdG5hbWUiOiJTbWl0aCIsImZpcnN0bmFtZSI6Iktla3MiLCJpYXQiOjE2NzMzNDU1NzYsImV4cCI6MTY3ODUyOTU3Nn0.yjI7Mf-RfxOsMpNIrGyo5zBKYtbpIUBZU9RJUH46iqY
 ###
 
 # Get posts
   GET http://localhost:3334/api/post HTTP/1.1
 ###
 
-# Get post
+# Get info of post
   GET  http://localhost:3334/api/post/1 HTTP/1.1
 ###
 
@@ -69,4 +71,9 @@ Content-Type: application/json
 {
   "postText": "New some text"
 }
+###
+
+# Repost
+  Post http://localhost:3334/api/post/repost/7 HTTP/1.1
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2JkM2ExYzIzNmE0YjYzODc4YThhMWMiLCJlbWFpbCI6InVzZXIyMUBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwibGFzdG5hbWUiOiJTbWl0aCIsImZpcnN0bmFtZSI6Iktla3MiLCJpYXQiOjE2NzMzNDU1NzYsImV4cCI6MTY3ODUyOTU3Nn0.yjI7Mf-RfxOsMpNIrGyo5zBKYtbpIUBZU9RJUH46iqY
 ###

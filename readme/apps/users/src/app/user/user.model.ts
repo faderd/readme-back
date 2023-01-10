@@ -41,6 +41,12 @@ export class UserModel extends Document implements UserInterface {
     default: UserRole.User,
   })
   public role: UserRole;
+
+  @Prop({
+    required: true,
+    type: Array,
+  })
+  public subscribersId: string[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserModel);

@@ -12,24 +12,26 @@ datasource db {
 }
 
 model Post {
-  id              Int       @id @default(autoincrement())
-  authorId        String
-  datePublication DateTime  @default(now())
-  dateCreation    DateTime  @default(now())
-  state           PostState
-  isRepost        Boolean
-  type            PostType
-  tags            String[]
-  title           String
-  urlVideo        String
-  announcement    String
-  postText        String
-  quoteText       String
-  quoteAuthor     String
-  photo           String
-  link            String
-  description     String
-  comments        Comment[]
+  id               Int       @id @default(autoincrement())
+  authorId         String
+  datePublication  DateTime  @default(now())
+  dateCreation     DateTime  @default(now())
+  state            PostState
+  isRepost         Boolean
+  originalAuthorId String    @default("")
+  originalPostId   Int       @default(0)
+  type             PostType
+  tags             String[]
+  title            String
+  urlVideo         String
+  announcement     String
+  postText         String
+  quoteText        String
+  quoteAuthor      String
+  photo            String
+  link             String
+  description      String
+  comments         Comment[]
 }
 
 model Comment {

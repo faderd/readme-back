@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common/exceptions';
 import dayjs = require('dayjs');
 import { PostRepository } from '../post/post.repository';
 import { COMMENT_NOT_FOUND, POST_NOT_EXIST } from './comment.constant';
@@ -18,7 +19,7 @@ export class CommentService {
 
     // Проверим, существует ли пост с таким id
     if (! await this.postRepository.findById(+postId)) {
-      throw new Error(POST_NOT_EXIST);
+      throw new NotFoundException(POST_NOT_EXIST);
     }
 
     const comment = { authorId: authorId, date: dayjs().toDate(), postId: +postId, text };
@@ -42,7 +43,7 @@ export class CommentService {
     const existComment = await this.commentRepository.findById(id);
 
     if (!existComment) {
-      throw new Error(COMMENT_NOT_FOUND);
+      throw new NotFoundException(COMMENT_NOT_FOUND);
     }
 
     const comment = { authorId: 'temporary id', date: dayjs().toDate(), postId: +postId, text };

@@ -8,6 +8,8 @@ export class PostEntity implements EntityInterface<PostEntity>, PostInterface {
   public dateCreation: Date;
   public state: PostState;
   public isRepost: boolean;
+  public originalAuthorId?: string;
+  public originalPostId?: number;
   public type: PostType;
   public tags?: string[];
   public title: string;
@@ -34,6 +36,8 @@ export class PostEntity implements EntityInterface<PostEntity>, PostInterface {
     this.dateCreation = new Date();
     this.state = post.state;
     this.isRepost = post.isRepost;
+    this.originalAuthorId = post.originalAuthorId;
+    this.originalPostId = post.originalPostId;
     this.type = post.type;
     this.tags = post.tags || [];
     this.title = post.title || '';

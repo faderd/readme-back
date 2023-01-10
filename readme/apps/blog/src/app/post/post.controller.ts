@@ -1,16 +1,20 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PostService } from './post.service';
 import { PostRdo } from './rdo/post.rdo';
-import { fillObject } from '@readme/core';
+import { fillObject, GetUserFromToken, JwtAuthGuard } from '@readme/core';
 import { PostQuery } from './query/post.query';
-import { PostType } from '@readme/shared-types';
+import { CommandEvent, PostType } from '@readme/shared-types';
 import { CreatePostVideoDto } from './dto/create-post-video.dto';
 import { CreatePostTextDto } from './dto/create-post-text.dto';
 import { CreatePostQuoteDto } from './dto/create-post-quote.dto';
 import { CreatePostPhotoDto } from './dto/create-post-photo.dto';
 import { CreatePostLinkDto } from './dto/create-post-link.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import { MessagePattern } from '@nestjs/microservices';
+import { BadRequestException } from '@nestjs/common/exceptions';
+import { ERROR_ACTIONS_OWN_POST } from './post.constant';
+import { PostInfoRdo } from './rdo/post-info.rdo';
 
 @ApiTags('post')
 @Controller('post')
@@ -20,90 +24,133 @@ export class PostController {
   ) { }
 
   @Post(`/${PostType.Video}`)
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({
     type: PostRdo,
     status: HttpStatus.CREATED,
     description: 'The new post has been successfully created',
   })
-  async createVideo(@Body() dto: CreatePostVideoDto) {
+  async createVideo(
+    @GetUserFromToken('id') userId: string,
+    @Body() dto: CreatePostVideoDto
+  ) {
     dto = fillObject(CreatePostVideoDto, dto);
-    const newPost = await this.postService.create(dto, PostType.Video);
+    const newPost = await this.postService.create(dto, PostType.Video, userId);
     return fillObject(PostRdo, newPost);
   }
 
   @Post(`/${PostType.Text}`)
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({
     type: PostRdo,
     status: HttpStatus.CREATED,
     description: 'The new post has been successfully created',
   })
-  async createText(@Body() dto: CreatePostTextDto) {
+  async createText(
+    @GetUserFromToken('id') userId: string,
+    @Body() dto: CreatePostTextDto
+  ) {
     dto = fillObject(CreatePostTextDto, dto);
-    const newPost = await this.postService.create(dto, PostType.Text);
+    const newPost = await this.postService.create(dto, PostType.Text, userId);
     return fillObject(PostRdo, newPost);
   }
 
   @Post(`/${PostType.Quote}`)
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({
     type: PostRdo,
     status: HttpStatus.CREATED,
     description: 'The new post has been successfully created',
   })
-  async createQuote(@Body() dto: CreatePostQuoteDto) {
+  async createQuote(
+    @GetUserFromToken('id') userId: string,
+    @Body() dto: CreatePostQuoteDto
+  ) {
     dto = fillObject(CreatePostQuoteDto, dto);
-    const newPost = await this.postService.create(dto, PostType.Quote);
+    const newPost = await this.postService.create(dto, PostType.Quote, userId);
     return fillObject(PostRdo, newPost);
   }
 
   @Post(`/${PostType.Photo}`)
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({
     type: PostRdo,
     status: HttpStatus.CREATED,
     description: 'The new post has been successfully created',
   })
-  async createPhoto(@Body() dto: CreatePostPhotoDto) {
+  async createPhoto(
+    @GetUserFromToken('id') userId: string,
+    @Body() dto: CreatePostPhotoDto
+  ) {
     dto = fillObject(CreatePostPhotoDto, dto);
-    const newPost = await this.postService.create(dto, PostType.Photo);
+    const newPost = await this.postService.create(dto, PostType.Photo, userId);
     return fillObject(PostRdo, newPost);
   }
 
   @Post(`/${PostType.Link}`)
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({
     type: PostRdo,
     status: HttpStatus.CREATED,
     description: 'The new post has been successfully created',
   })
-  async createLink(@Body() dto: CreatePostLinkDto) {
+  async createLink(
+    @GetUserFromToken('id') userId: string,
+    @Body() dto: CreatePostLinkDto
+  ) {
     dto = fillObject(CreatePostLinkDto, dto);
-    const newPost = await this.postService.create(dto, PostType.Link);
+    const newPost = await this.postService.create(dto, PostType.Link, userId);
     return fillObject(PostRdo, newPost);
   }
 
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({
     type: String,
     status: HttpStatus.OK,
     description: 'Post has been successfully deleted.',
   })
-  async delete(@Param('id', ParseIntPipe) id: number) {
-    return await this.postService.delete(id);
+  async delete(
+    @GetUserFromToken('id') userId: string,
+    @Param('id', ParseIntPipe) postId: number,
+  ) {
+    const post = await this.postService.getById(postId);
+
+    if (userId !== post.authorId) {
+      throw new BadRequestException(ERROR_ACTIONS_OWN_POST);
+    }
+
+    return await this.postService.delete(postId);
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({
     type: String,
     status: HttpStatus.OK,
     description: 'Post has been successfully updated.',
   })
-  async update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdatePostDto) {
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdatePostDto,
+    @GetUserFromToken('id') userId: string,
+  ) {
+    const post = await this.postService.getById(id);
+
+    if (userId !== post.authorId) {
+      throw new BadRequestException(ERROR_ACTIONS_OWN_POST);
+    }
+
     const updatedPost = await this.postService.update(id, dto)
     return fillObject(PostRdo, updatedPost);
   }
 
   @Get('')
   @ApiResponse({
-    status: HttpStatus.OK
+    type: [PostRdo],
+    status: HttpStatus.OK,
+    description: 'Get posts list',
   })
   async getAll(@Query() query: PostQuery) {
     const posts = await this.postService.getAll(query);
@@ -113,10 +160,31 @@ export class PostController {
 
   @Get(':id')
   @ApiResponse({
-    type: String,
+    type: PostInfoRdo,
     status: HttpStatus.OK,
   })
   async findById(@Param('id', ParseIntPipe) id: number) {
-    return await this.postService.getById(id);
+    const existPost = await this.postService.getById(id);
+    return fillObject(PostInfoRdo, existPost);
+  }
+
+  @Post('/repost/:id')
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    type: PostInfoRdo,
+    status: HttpStatus.CREATED,
+    description: 'Repost has been successfully created'
+  })
+  async createRepost(
+    @Param('id', ParseIntPipe) postId: number,
+    @GetUserFromToken('id') userId: string,
+  ) {
+    return this.postService.createRepost(postId, userId);
+  }
+
+  @MessagePattern({ cmd: CommandEvent.GetPostsByUserId })
+  public async getPostsByUserId(userId: string) {
+    const result = await this.postService.getByUserId(userId);
+    return result;
   }
 }

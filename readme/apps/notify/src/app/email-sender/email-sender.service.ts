@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { EMAIL_ADD_SUBSCRIBER_SUBJECT, EMAIL_TO_SEND, ERROR_SENDING_EMAIL, NOTIFY_SUBJECT, POST_URL } from './email-sender.constant';
 import { SubscriberInterface } from '@readme/shared-types';
@@ -24,7 +24,7 @@ export class EmailSenderService {
       }
     })
       .catch((er) => {
-        throw new Error(`${ERROR_SENDING_EMAIL}: ${er}`);
+        throw new ServiceUnavailableException(`${ERROR_SENDING_EMAIL}: ${er}`);
       });
   }
 
@@ -48,7 +48,7 @@ export class EmailSenderService {
           await this.emailSubscriberRepository.update(subscriber.id,new EmailSubscriberEntity(subscriber));
         })
         .catch((er) => {
-          throw new Error(`${ERROR_SENDING_EMAIL}: ${er}`);
+          throw new ServiceUnavailableException(`${ERROR_SENDING_EMAIL}: ${er}`);
         });
     });
   }

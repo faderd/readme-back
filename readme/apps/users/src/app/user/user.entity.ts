@@ -11,6 +11,7 @@ export class UserEntity implements UserInterface {
   public avatar: string;
   public passwordHash: string;
   public role: UserRole;
+  public subscribersId: string[]
 
   constructor(user: UserInterface) {
     this.fillEntity(user);
@@ -29,6 +30,7 @@ export class UserEntity implements UserInterface {
     this.avatar = user.avatar;
     this.passwordHash = user.passwordHash;
     this.role = user.role;
+    this.subscribersId = user.subscribersId;
   }
 
   public async setPassword(password: string): Promise<UserEntity> {

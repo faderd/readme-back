@@ -49,4 +49,12 @@ export class PostRepository implements CRUDRepositoryInterface<PostEntity, numbe
   public async update(id: number, item: PostEntity): Promise<PostInterface> {
     return Promise.resolve(undefined);
   }
+
+  public async findByUserId(userId: string): Promise<PostInterface[]> {
+    return this.prisma.post.findMany({
+      where: {
+        authorId: userId,
+      },
+    }) as Promise<PostInterface[]>;
+  }
 }

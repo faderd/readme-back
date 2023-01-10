@@ -9,4 +9,5 @@ export interface UserInterface {
   avatar: string;
   passwordHash: string;
   role: UserRole;
+  subscribersId: string[];
 }

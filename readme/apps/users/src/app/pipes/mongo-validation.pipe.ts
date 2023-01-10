@@ -7,7 +7,7 @@ const BAD_MONGOID_ERROR = 'Bad entity ID';
 export class MongoidValidationPipe implements PipeTransform {
     transform(value: string, { type }: ArgumentMetadata) {
         if (type !== 'param') {
-            throw new Error('This pipe must used only with params!')
+            throw new BadRequestException('This pipe must used only with params!')
         }
 
         if (!Types.ObjectId.isValid(value)) {
