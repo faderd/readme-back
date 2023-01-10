@@ -21,4 +21,5 @@ export interface PostInterface {
   link?: string;
   description?: string;
   tags?: string[];
+  likeUserIds?: string[];
 }

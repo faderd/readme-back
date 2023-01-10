@@ -135,4 +135,11 @@ export class PostInfoRdo {
   })
   @Expose()
   public description?: string;
+
+  @ApiProperty({
+    description: 'Likes',
+    example: '["gds45fds", "fjnxc7da"]'
+  })
+  @Expose()
+  public likeUserIds: string[];
 }

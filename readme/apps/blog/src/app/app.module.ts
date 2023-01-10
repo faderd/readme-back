@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ENV_FILE_PATH } from './app.constant';
 import { rabbitMqOptions } from '../config/rabbitmq.config';
 import { jwtConfig } from '@readme/config';
+import { LikeModule } from './like/like.module';
 import envSchema from './env.schema';
 
 @Module({
@@ -18,6 +19,7 @@ import envSchema from './env.schema';
       load: [rabbitMqOptions, jwtConfig],
       validationSchema: envSchema,
     }),
+    LikeModule,
   ],
   controllers: [],
   providers: [],

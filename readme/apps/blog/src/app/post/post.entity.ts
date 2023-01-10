@@ -21,6 +21,7 @@ export class PostEntity implements EntityInterface<PostEntity>, PostInterface {
   public photo: string;
   public link: string;
   public description?: string;
+  public likeUserIds: string[];
 
   constructor(post: PostInterface) {
     this.fillEntity(post);
@@ -36,8 +37,8 @@ export class PostEntity implements EntityInterface<PostEntity>, PostInterface {
     this.dateCreation = new Date();
     this.state = post.state;
     this.isRepost = post.isRepost;
-    this.originalAuthorId = post.originalAuthorId;
-    this.originalPostId = post.originalPostId;
+    this.originalAuthorId = post.originalAuthorId || '';
+    this.originalPostId = post.originalPostId || 0;
     this.type = post.type;
     this.tags = post.tags || [];
     this.title = post.title || '';
@@ -49,5 +50,6 @@ export class PostEntity implements EntityInterface<PostEntity>, PostInterface {
     this.photo = post.photo || '';
     this.link = post.link || '';
     this.description = post.description || '';
+    this.likeUserIds = post.likeUserIds || [];
   }
 }

@@ -18,7 +18,7 @@ model Post {
   dateCreation     DateTime  @default(now())
   state            PostState
   isRepost         Boolean
-  originalAuthorId String    @default("")
+  originalAuthorId String
   originalPostId   Int       @default(0)
   type             PostType
   tags             String[]
@@ -32,6 +32,7 @@ model Post {
   link             String
   description      String
   comments         Comment[]
+  likeUserIds      String[]
 }
 
 model Comment {

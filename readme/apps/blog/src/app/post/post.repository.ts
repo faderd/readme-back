@@ -47,7 +47,12 @@ export class PostRepository implements CRUDRepositoryInterface<PostEntity, numbe
   }
 
   public async update(id: number, item: PostEntity): Promise<PostInterface> {
-    return Promise.resolve(undefined);
+    return this.prisma.post.update({
+      where: {
+        id: id,
+      },
+      data: item,
+    }) as Promise<PostInterface>;
   }
 
   public async findByUserId(userId: string): Promise<PostInterface[]> {
