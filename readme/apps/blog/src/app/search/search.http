@@ -1,0 +1,3 @@
+# Search
+  GET http://localhost:3334/api/search/posts/?query=big HTTP/1.1
+###

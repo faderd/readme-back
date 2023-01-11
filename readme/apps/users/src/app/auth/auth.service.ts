@@ -1,5 +1,5 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { ConflictException } from '@nestjs/common/exceptions';
+import { ConflictException, NotImplementedException } from '@nestjs/common/exceptions';
 import { JwtService } from '@nestjs/jwt';
 import { ClientProxy } from '@nestjs/microservices/client';
 import { createEvent } from '@readme/core';
@@ -127,5 +127,15 @@ export class AuthService {
     existUser.subscribersId.push(subscriberId);
     const userEntity = new UserEntity(existUser);
     this.userRepository.update(userId, userEntity);
+  }
+
+  async setAvatar(file: File, userId: string) {
+    const existUser = await this.userRepository.findById(userId);
+
+    if (!existUser) {
+      throw new UnauthorizedException(AUTH_USER_NOT_FOUND);
+    }
+
+    throw new NotImplementedException();
   }
 }

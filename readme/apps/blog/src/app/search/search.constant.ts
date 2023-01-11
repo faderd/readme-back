@@ -1,0 +1,2 @@
+export const DEFAULT_SEARCH_POST_COUNT_LIMIT = 20;
+export const DEFAULT_SORT_DIRECTION = 'desc';

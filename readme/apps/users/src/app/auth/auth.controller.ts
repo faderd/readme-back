@@ -1,6 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
-import { Put } from '@nestjs/common/decorators';
+import { Put, UploadedFile, UseInterceptors } from '@nestjs/common/decorators';
 import { BadRequestException } from '@nestjs/common/exceptions';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiHeader, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { fillObject, GetUserFromToken, JwtAuthGuard } from '@readme/core';
 import { MongoidValidationPipe } from '../pipes/mongo-validation.pipe';
@@ -87,5 +88,23 @@ export class AuthController {
     }
 
     return this.authService.makeSubscribe(subscriberId, userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/avatar')
+  @UseInterceptors(FileInterceptor('avatar', {
+    dest: 'uploads/avatars/',
+  }))
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
+  })
+  async uploadAvatar(
+    @GetUserFromToken('id') userId: string,
+    @UploadedFile() file: File,
+  ) {
+    const updatedUser = this.authService.setAvatar(file, userId)
+    return fillObject(UserRdo, updatedUser);
   }
 }

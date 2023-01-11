@@ -57,7 +57,7 @@ Content-Type: application/json
 ###
 
 # Get posts
-  GET http://localhost:3334/api/post HTTP/1.1
+  GET http://localhost:3334/api/post?page=1 HTTP/1.1
 ###
 
 # Get info of post

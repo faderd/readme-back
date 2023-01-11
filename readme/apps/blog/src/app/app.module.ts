@@ -6,6 +6,7 @@ import { ENV_FILE_PATH } from './app.constant';
 import { rabbitMqOptions } from '../config/rabbitmq.config';
 import { jwtConfig } from '@readme/config';
 import { LikeModule } from './like/like.module';
+import { SearchModule } from './search/search.module';
 import envSchema from './env.schema';
 
 @Module({
@@ -20,6 +21,7 @@ import envSchema from './env.schema';
       validationSchema: envSchema,
     }),
     LikeModule,
+    SearchModule,
   ],
   controllers: [],
   providers: [],

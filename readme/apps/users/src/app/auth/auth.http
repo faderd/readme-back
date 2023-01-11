@@ -40,3 +40,16 @@ Content-Type: application/json
 GET http://localhost:3333/api/auth/subscribe/63bd3a18236a4b63878a8a18 HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2JkM2ExYzIzNmE0YjYzODc4YThhMWMiLCJlbWFpbCI6InVzZXIyMUBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwibGFzdG5hbWUiOiJTbWl0aCIsImZpcnN0bmFtZSI6Iktla3MiLCJpYXQiOjE2NzMzNDU1NzYsImV4cCI6MTY3ODUyOTU3Nn0.yjI7Mf-RfxOsMpNIrGyo5zBKYtbpIUBZU9RJUH46iqY
 ###
+
+## Upload avatar
+POST http://localhost:3333/api/auth/avatar HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2JkM2ExODIzNmE0YjYzODc4YThhMTgiLCJlbWFpbCI6InVzZXIyMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwibGFzdG5hbWUiOiJTbWl0aCIsImZpcnN0bmFtZSI6Iktla3MiLCJpYXQiOjE2NzM0MjkzNzYsImV4cCI6MTY3ODYxMzM3Nn0.veIbp_3m9bbCcVw8q8xatQBolhFFx86idAPJIU64flI
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="avatar"; filename="avatar.jpg"
+Content-Type: image/jpeg
+
+< D:/downloads/ava.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+###
