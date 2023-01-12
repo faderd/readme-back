@@ -78,14 +78,13 @@ export class AuthService {
     if (!existUser) {
       throw new UnauthorizedException(AUTH_USER_NOT_FOUND);
     }
-    console.log('user: ', existUser);
 
     const userEntity = new UserEntity(existUser);
 
-    const userPostsCount = ((await firstValueFrom(this.rabbitClient.send(
-      { cmd: CommandEvent.GetPostsByUserId },
+    const userPostsCount = (await firstValueFrom(this.rabbitClient.send(
+      { cmd: CommandEvent.GetUserPostsCount },
       existUser._id
-    ))) as PostInterface[]).length;
+    ))) as PostInterface[];
 
     return { ...userEntity.toObject(), userPostsCount };
   }

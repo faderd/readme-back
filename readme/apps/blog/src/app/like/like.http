@@ -1,9 +1,9 @@
 # Set like
-POST http://localhost:3334/api/like/set-like/5 HTTP/1.1
+POST http://localhost:3334/api/like/set-like/25 HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2JkM2ExODIzNmE0YjYzODc4YThhMTgiLCJlbWFpbCI6InVzZXIyMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwibGFzdG5hbWUiOiJTbWl0aCIsImZpcnN0bmFtZSI6Iktla3MiLCJpYXQiOjE2NzMzNDg5ODgsImV4cCI6MTY3ODUzMjk4OH0.PP8myD_K3-YhWMjiw0IbCOdTQ2-285t5iftxHgHJFsU
 ###
 
 # Set like
-POST http://localhost:3334/api/like/remove-like/5 HTTP/1.1
+POST http://localhost:3334/api/like/remove-like/30 HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2JkM2ExODIzNmE0YjYzODc4YThhMTgiLCJlbWFpbCI6InVzZXIyMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwibGFzdG5hbWUiOiJTbWl0aCIsImZpcnN0bmFtZSI6Iktla3MiLCJpYXQiOjE2NzMzNDg5ODgsImV4cCI6MTY3ODUzMjk4OH0.PP8myD_K3-YhWMjiw0IbCOdTQ2-285t5iftxHgHJFsU
 ###

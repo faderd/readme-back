@@ -76,8 +76,12 @@ export class PostService {
     return this.postRepository.findById(id);
   }
 
-  async getByUserId(userId: string) {
-    return this.postRepository.findByUserId(userId);
+  // async getByUserId(userId: string, query: PostQuery) {
+  //   return this.postRepository.findByUserId(userId, query);
+  // }
+
+  async getUserPostsCount(userId: string) {
+    return this.postRepository.getUserPostsCount(userId);
   }
 
   async createRepost(postId: number, userId: string) {
@@ -87,7 +91,7 @@ export class PostService {
       throw new NotFoundException(POST_NOT_FOUND);
     }
 
-    const isUniqueRepost = !(await this.postRepository.findByUserId(userId)).find((post) => post.isRepost && post.originalPostId === postId);
+    const isUniqueRepost = !(await this.postRepository.findByUserIdAll(userId)).find((post) => post.isRepost && post.originalPostId === postId);
 
     if (!isUniqueRepost) {
       throw new BadRequestException(ERROR_REPOST_EXIST);
@@ -102,5 +106,9 @@ export class PostService {
     const postEntity = new PostEntity(existPost);
 
     return this.postRepository.create(postEntity);
+  }
+
+  async getDrafts(userId: string) {
+    return this.postRepository.findDrafts(userId);
   }
 }

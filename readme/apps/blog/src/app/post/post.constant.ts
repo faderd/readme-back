@@ -30,3 +30,9 @@ export const PostQuoteAuthorLengthRange = {
   MAX: 50,
 }
 export const PostDescriptionMaxLength = 300;
+
+export enum SortType {
+  Default = 'datePublication',
+  Like = 'likeUserIds',
+  Comment = 'comments'
+}

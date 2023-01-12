@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer';
 import { IsIn, IsNumber, IsOptional } from 'class-validator';
+import { SortType } from '../../post/post.constant';
 import { DEFAULT_SEARCH_POST_COUNT_LIMIT, DEFAULT_SORT_DIRECTION } from '../search.constant';
 
 export class SearchQuery {
@@ -17,4 +18,7 @@ export class SearchQuery {
   @Transform(({ value }) => +value)
   @IsOptional()
   public page: number;
+
+  @IsOptional()
+  public sortType = SortType.Default;
 }

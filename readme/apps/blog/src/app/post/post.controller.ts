@@ -15,6 +15,7 @@ import { MessagePattern } from '@nestjs/microservices';
 import { BadRequestException } from '@nestjs/common/exceptions';
 import { ERROR_ACTIONS_OWN_POST } from './post.constant';
 import { PostInfoRdo } from './rdo/post-info.rdo';
+import { CreatePostRdo } from './rdo/create-post.rdo';
 
 @ApiTags('post')
 @Controller('post')
@@ -36,7 +37,7 @@ export class PostController {
   ) {
     dto = fillObject(CreatePostVideoDto, dto);
     const newPost = await this.postService.create(dto, PostType.Video, userId);
-    return fillObject(PostRdo, newPost);
+    return fillObject(CreatePostRdo, newPost);
   }
 
   @Post(`/${PostType.Text}`)
@@ -52,7 +53,7 @@ export class PostController {
   ) {
     dto = fillObject(CreatePostTextDto, dto);
     const newPost = await this.postService.create(dto, PostType.Text, userId);
-    return fillObject(PostRdo, newPost);
+    return fillObject(CreatePostRdo, newPost);
   }
 
   @Post(`/${PostType.Quote}`)
@@ -68,7 +69,7 @@ export class PostController {
   ) {
     dto = fillObject(CreatePostQuoteDto, dto);
     const newPost = await this.postService.create(dto, PostType.Quote, userId);
-    return fillObject(PostRdo, newPost);
+    return fillObject(CreatePostRdo, newPost);
   }
 
   @Post(`/${PostType.Photo}`)
@@ -84,7 +85,7 @@ export class PostController {
   ) {
     dto = fillObject(CreatePostPhotoDto, dto);
     const newPost = await this.postService.create(dto, PostType.Photo, userId);
-    return fillObject(PostRdo, newPost);
+    return fillObject(CreatePostRdo, newPost);
   }
 
   @Post(`/${PostType.Link}`)
@@ -100,7 +101,7 @@ export class PostController {
   ) {
     dto = fillObject(CreatePostLinkDto, dto);
     const newPost = await this.postService.create(dto, PostType.Link, userId);
-    return fillObject(PostRdo, newPost);
+    return fillObject(CreatePostRdo, newPost);
   }
 
 
@@ -146,7 +147,7 @@ export class PostController {
     return fillObject(PostRdo, updatedPost);
   }
 
-  @Get('')
+  @Get('/')
   @ApiResponse({
     type: [PostRdo],
     status: HttpStatus.OK,
@@ -156,6 +157,19 @@ export class PostController {
     const posts = await this.postService.getAll(query);
 
     return posts.map((post) => fillObject(PostRdo, post));
+  }
+
+  @Get('/drafts')
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    type: [PostRdo],
+    status: HttpStatus.OK,
+    description: 'Get drafts list',
+  })
+  async getDrafts(
+    @GetUserFromToken('id') userId: string,
+  ) {
+    return this.postService.getDrafts(userId);
   }
 
   @Get(':id')
@@ -182,9 +196,8 @@ export class PostController {
     return this.postService.createRepost(postId, userId);
   }
 
-  @MessagePattern({ cmd: CommandEvent.GetPostsByUserId })
+  @MessagePattern({ cmd: CommandEvent.GetUserPostsCount })
   public async getPostsByUserId(userId: string) {
-    const result = await this.postService.getByUserId(userId);
-    return result;
+    return this.postService.getUserPostsCount(userId);
   }
 }
