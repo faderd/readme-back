@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, Transform } from 'class-transformer';
+import { Expose } from 'class-transformer';
 import { PostState, PostType } from '@readme/shared-types';
 
-export class PostRdo {
+export class CreatePostRdo {
   @ApiProperty({
     description: 'The uniq post ID',
     example: '123',
@@ -128,12 +128,4 @@ export class PostRdo {
   })
   @Expose()
   public likeUserIds: string[];
-
-  @ApiProperty({
-    description: 'Comments',
-    example: 3
-  })
-  @Transform(({obj}) => obj._count.comments)
-  @Expose()
-  public commentsCount: number;
 }

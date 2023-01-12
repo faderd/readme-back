@@ -12,3 +12,25 @@ export function getMongoConnectionString({ username, password, host, port, datab
 export function createEvent(commandEvent: CommandEvent) {
   return { cmd: commandEvent }
 }
+
+export function getOrderByField<T, N>(sortType: T, sortDirection: N) {
+  if (sortType === 'datePublication') {
+    return {
+      [sortType as string]: sortDirection,
+    }
+  }
+
+  if (sortType === 'comments') {
+    return {
+      [sortType as string]: {
+        _count: sortDirection,
+      }
+    }
+  }
+
+  if (sortType === 'likeUserIds') {
+    return {
+      [sortType as string]: sortDirection,
+    }
+  }
+}

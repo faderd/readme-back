@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Post } from '@prisma/client';
-import { CRUDRepositoryInterface } from '@readme/core';
-import { PostInterface } from '@readme/shared-types';
+import { CRUDRepositoryInterface, getOrderByField } from '@readme/core';
+import { PostInterface, PostState } from '@readme/shared-types';
 import { PrismaService } from '../prisma/prisma.service';
+import { SortType } from './post.constant';
 import { PostEntity } from './post.entity';
 import { PostQuery } from './query/post.query';
 
@@ -14,7 +15,12 @@ export class PostRepository implements CRUDRepositoryInterface<PostEntity, numbe
     const entityData = item.toObject();
 
     return this.prisma.post.create({
-      data: { ...entityData as Post }
+      data: {
+        ...entityData as Post,
+        comments: {
+          connect: []
+        },
+      }
     }) as Promise<PostInterface>;
   }
 
@@ -29,19 +35,32 @@ export class PostRepository implements CRUDRepositoryInterface<PostEntity, numbe
   public async findById(id: number): Promise<PostInterface | null> {
     return this.prisma.post.findFirst({
       where: {
-        id: +id,
+        id,
       },
     }) as Promise<PostInterface>;
   }
 
-  public async findAll({ limit, sortDirection, page }: PostQuery): Promise<PostInterface[]> {
+  public async findAll({ limit, sortDirection, page, sortType, postType, userId, tag }: PostQuery): Promise<PostInterface[]> {
     return this.prisma.post.findMany({
+      where: (postType || userId || tag) ? {
+        state: PostState.Published,
+        OR: [{
+          type: postType,
+        }, {
+          authorId: userId,
+        }, {
+          tags: {
+            has: tag ?? null
+          }
+        }]
+      } : {
+        state: PostState.Published
+      },
       take: limit,
-      orderBy: [
-        {
-          datePublication: sortDirection
-        }
-      ],
+      include: {
+        _count: { select: { comments: true } }
+      },
+      orderBy: getOrderByField<SortType, string>(sortType, sortDirection),
       skip: page > 0 ? limit * (page - 1) : undefined,
     }) as Promise<PostInterface[]>;
   }
@@ -55,11 +74,46 @@ export class PostRepository implements CRUDRepositoryInterface<PostEntity, numbe
     }) as Promise<PostInterface>;
   }
 
-  public async findByUserId(userId: string): Promise<PostInterface[]> {
+  // public async findByUserId(userId: string, { limit, sortDirection, page, sortType }: PostQuery): Promise<PostInterface[]> {
+
+  //   return this.prisma.post.findMany({
+  //     where: {
+  //       authorId: userId,
+  //       state: PostState.Published,
+  //     },
+  //     take: limit,
+  //     include: {
+  //       comments: true
+  //     },
+  //     orderBy: getOrderByField<SortType, string>(sortType, sortDirection),
+  //     skip: page > 0 ? limit * (page - 1) : undefined,
+  //   }) as Promise<PostInterface[]>;
+  // }
+
+  public async findByUserIdAll(userId: string): Promise<PostInterface[]> {
+
     return this.prisma.post.findMany({
       where: {
         authorId: userId,
       },
     }) as Promise<PostInterface[]>;
+  }
+
+  public async findDrafts(userId: string): Promise<PostInterface[]> {
+    return this.prisma.post.findMany({
+      where: {
+        authorId: userId,
+        state: PostState.Draft,
+      }
+    }) as Promise<PostInterface[]>;
+  }
+
+  public async getUserPostsCount(userId: string): Promise<number> {
+    return this.prisma.post.count({
+      where: {
+        authorId: userId,
+        state: PostState.Published,
+      },
+    });
   }
 }

@@ -13,3 +13,5 @@ coverage
 *.env
 
 db
+
+/uploads/
