@@ -1,10 +1,10 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseFilePipeBuilder, Post, UseGuards } from '@nestjs/common';
 import { Put, UploadedFile, UseInterceptors } from '@nestjs/common/decorators';
 import { BadRequestException } from '@nestjs/common/exceptions';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiHeader, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { fillObject, GetUserFromToken, JwtAuthGuard, MongoidValidationPipe } from '@readme/core';
-import { AUTH_USER_SUBSCRIBE_YOURSELF } from './auth.constant';
+import { AUTH_USER_SUBSCRIBE_YOURSELF, AVATAR_ALLOW_FILE_TYPES, AVATAR_MAX_FILE_SIZE } from './auth.constant';
 import { AuthService } from './auth.service';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -91,9 +91,7 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Post('/avatar')
-  @UseInterceptors(FileInterceptor('avatar', {
-    dest: 'uploads/avatars/',
-  }))
+  @UseInterceptors(FileInterceptor('avatar'))
   @ApiHeader({
     name: 'Authorization',
     description: 'Bearer token',
@@ -101,9 +99,14 @@ export class AuthController {
   })
   async uploadAvatar(
     @GetUserFromToken('id') userId: string,
-    @UploadedFile() file: File,
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({fileType: AVATAR_ALLOW_FILE_TYPES})
+        .addMaxSizeValidator({maxSize: AVATAR_MAX_FILE_SIZE})
+        .build()
+    ) file: Express.Multer.File,
   ) {
-    const updatedUser = this.authService.setAvatar(file, userId)
+    const updatedUser = await this.authService.setAvatar(file, userId);
     return fillObject(UserRdo, updatedUser);
   }
 }

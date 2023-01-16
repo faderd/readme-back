@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
-import { ConflictException, NotImplementedException } from '@nestjs/common/exceptions';
+import { ConflictException } from '@nestjs/common/exceptions';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { ClientProxy } from '@nestjs/microservices/client';
@@ -8,7 +8,7 @@ import { CommandEvent, UserInterface, UserRole } from '@readme/shared-types';
 import dayjs = require('dayjs');
 import { UserEntity } from '../user/user.entity';
 import { UserRepository } from '../user/user.repository';
-import { AUTH_USER_EXISTS, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG, RABBITMQ_SERVICE_NAME } from './auth.constant';
+import { AUTH_USER_EXISTS, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG, AVATAR_UPLOAD_PATH, RABBITMQ_SERVICE_NAME } from './auth.constant';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
@@ -127,14 +127,18 @@ export class AuthService {
     this.userRepository.update(userId, userEntity);
   }
 
-  async setAvatar(file: File, userId: string) {
+  async setAvatar(file: Express.Multer.File, userId: string) {
     const existUser = await this.userRepository.findById(userId);
 
     if (!existUser) {
       throw new UnauthorizedException(AUTH_USER_NOT_FOUND);
     }
 
-    throw new NotImplementedException();
+    const userEntity = new UserEntity(existUser);
+    const urlAvatar = `${AVATAR_UPLOAD_PATH}${file.filename}`;
+    userEntity.avatar = urlAvatar;
+
+    return this.userRepository.update(userEntity._id, userEntity);
   }
 
   private async getUserPostsCount(userId: string) {

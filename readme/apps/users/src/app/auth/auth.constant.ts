@@ -12,3 +12,6 @@ export const AuthUserPasswordLengthRange = {
     MAX: 12,
 }
 export const RABBITMQ_SERVICE_NAME = 'RABBITMQ_SERVICE';
+export const AVATAR_ALLOW_FILE_TYPES = /jpeg|png/;
+export const AVATAR_MAX_FILE_SIZE = 512000;
+export const AVATAR_UPLOAD_PATH = 'uploads/avatars/';
