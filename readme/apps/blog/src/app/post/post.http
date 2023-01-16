@@ -13,7 +13,7 @@ Content-Type: application/json
 
 # Create Text post
 POST http://localhost:3334/api/post/text HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2JkM2ExODIzNmE0YjYzODc4YThhMTgiLCJlbWFpbCI6InVzZXIyMEBub3Rmb3VuZC5sb2NhbCIsInJvbGUiOiJ1c2VyIiwibGFzdG5hbWUiOiJTbWl0aCIsImZpcnN0bmFtZSI6Iktla3MiLCJpYXQiOjE2NzM0NTcyMDQsImV4cCI6MTY3ODY0MTIwNH0.OLHrgTi1l3fAS9Kx0OqTRCIMh7OcyAu0eNSDk2AmWzk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2M1NjlkODVjMWFmOTM4N2ZjYTM2NzEiLCJlbWFpbCI6InVzZXIxQG5vdGZvdW5kLmxvY2FsIiwicm9sZSI6InVzZXIiLCJsYXN0bmFtZSI6IlNtaXRoIiwiZmlyc3RuYW1lIjoiS2VrcyIsImlhdCI6MTY3Mzg4MjA5NywiZXhwIjoxNjc5MDY2MDk3fQ.HVeyJFhfW9RZFrE4n-g2z2yTGJIZmOAa-T7T0bT9jXQ
 Content-Type: application/json
 
 {
@@ -59,6 +59,10 @@ Content-Type: application/json
 
 # Get posts
   GET http://localhost:3334/api/post?page=1&sortType=comments HTTP/1.1
+###
+
+# Get posts count by user id
+GET http://localhost:3334/api/post/posts-count/63c569d85c1af9387fca3671 HTTP/1.1
 ###
 
 # Get drafts

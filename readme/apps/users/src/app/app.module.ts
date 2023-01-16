@@ -9,6 +9,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { getMongoDbConfig } from '../config/mongodb.config';
 import { rabbitMqOptions } from '../config/rabbitmq.config';
 import { jwtConfig } from '@readme/config';
+import postServiceConfig from '../config/post-service.config';
 
 
 @Module({
@@ -17,7 +18,7 @@ import { jwtConfig } from '@readme/config';
       cache: true,
       isGlobal: true,
       envFilePath: ENV_FILE_PATH,
-      load: [databaseConfig, jwtConfig, rabbitMqOptions],
+      load: [databaseConfig, jwtConfig, rabbitMqOptions, postServiceConfig],
       validationSchema: envSchema,
     }),
     MongooseModule.forRootAsync(

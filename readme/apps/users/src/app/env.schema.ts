@@ -33,7 +33,7 @@ export default Joi.object({
     .string()
     .uri()
     .required(),
-  RABBIT_USERS_SERVICE_QUEUE: Joi
+  RABBIT_NOTIFY_SERVICE_QUEUE: Joi
     .string()
     .required(),
 });

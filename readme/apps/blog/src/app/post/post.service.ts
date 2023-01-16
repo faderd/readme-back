@@ -76,12 +76,18 @@ export class PostService {
     return this.postRepository.findById(id);
   }
 
-  // async getByUserId(userId: string, query: PostQuery) {
-  //   return this.postRepository.findByUserId(userId, query);
-  // }
-
   async getUserPostsCount(userId: string) {
-    return this.postRepository.getUserPostsCount(userId);
+    const postsCount = await this.postRepository.getUserPostsCount(userId);
+
+    console.log('service: ', userId);
+
+
+    const response = {
+      postsCount,
+      authorId: userId,
+    };
+
+    return response;
   }
 
   async createRepost(postId: number, userId: string) {

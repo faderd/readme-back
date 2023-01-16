@@ -1,23 +1,25 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConflictException, NotImplementedException } from '@nestjs/common/exceptions';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { ClientProxy } from '@nestjs/microservices/client';
 import { createEvent } from '@readme/core';
-import { CommandEvent, PostInterface, UserInterface, UserRole } from '@readme/shared-types';
+import { CommandEvent, UserInterface, UserRole } from '@readme/shared-types';
 import dayjs = require('dayjs');
-import { firstValueFrom } from 'rxjs';
 import { UserEntity } from '../user/user.entity';
 import { UserRepository } from '../user/user.repository';
 import { AUTH_USER_EXISTS, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG, RABBITMQ_SERVICE_NAME } from './auth.constant';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import axios from 'axios';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
     @Inject(RABBITMQ_SERVICE_NAME) private readonly rabbitClient: ClientProxy,
   ) {
   }
@@ -81,10 +83,7 @@ export class AuthService {
 
     const userEntity = new UserEntity(existUser);
 
-    const userPostsCount = (await firstValueFrom(this.rabbitClient.send(
-      { cmd: CommandEvent.GetUserPostsCount },
-      existUser._id
-    ))) as PostInterface[];
+    const userPostsCount = await this.getUserPostsCount(userEntity._id);
 
     return { ...userEntity.toObject(), userPostsCount };
   }
@@ -136,5 +135,19 @@ export class AuthService {
     }
 
     throw new NotImplementedException();
+  }
+
+  private async getUserPostsCount(userId: string) {
+    try {
+      const url = this.configService.get<string>('post.url');
+      const response = (await axios.get(`${url}posts-count/${userId}`));
+
+      if (response.statusText === 'OK') {
+        return response.data;
+      }
+    } catch (error) {
+      Logger.error(error);
+      return null;
+    }
   }
 }

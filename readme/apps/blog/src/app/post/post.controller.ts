@@ -2,20 +2,20 @@ import { Body, Controller, Delete, Get, HttpStatus, Param, ParseIntPipe, Patch, 
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { PostService } from './post.service';
 import { PostRdo } from './rdo/post.rdo';
-import { fillObject, GetUserFromToken, JwtAuthGuard } from '@readme/core';
+import { fillObject, GetUserFromToken, JwtAuthGuard, MongoidValidationPipe } from '@readme/core';
 import { PostQuery } from './query/post.query';
-import { CommandEvent, PostType } from '@readme/shared-types';
+import { PostType } from '@readme/shared-types';
 import { CreatePostVideoDto } from './dto/create-post-video.dto';
 import { CreatePostTextDto } from './dto/create-post-text.dto';
 import { CreatePostQuoteDto } from './dto/create-post-quote.dto';
 import { CreatePostPhotoDto } from './dto/create-post-photo.dto';
 import { CreatePostLinkDto } from './dto/create-post-link.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { MessagePattern } from '@nestjs/microservices';
 import { BadRequestException } from '@nestjs/common/exceptions';
 import { ERROR_ACTIONS_OWN_POST } from './post.constant';
 import { PostInfoRdo } from './rdo/post-info.rdo';
 import { CreatePostRdo } from './rdo/create-post.rdo';
+import { PostsCountRdo } from './rdo/post-count.rdo';
 
 @ApiTags('post')
 @Controller('post')
@@ -196,8 +196,19 @@ export class PostController {
     return this.postService.createRepost(postId, userId);
   }
 
-  @MessagePattern({ cmd: CommandEvent.GetUserPostsCount })
-  public async getPostsByUserId(userId: string) {
-    return this.postService.getUserPostsCount(userId);
+  @Get('/posts-count/:userId')
+  @ApiResponse({
+    type: PostsCountRdo,
+    status: HttpStatus.OK,
+    description: 'Get posts count by user id'
+  })
+  public async getPostsCountByUserId(
+    @Param('userId', MongoidValidationPipe) userId: string,
+  ) {
+    console.log('controller: ', userId);
+
+    const postsCount = await this.postService.getUserPostsCount(userId);
+
+    return fillObject(PostsCountRdo, postsCount);
   }
 }
