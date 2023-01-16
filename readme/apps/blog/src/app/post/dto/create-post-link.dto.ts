@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsOptional, IsString, IsUrl, MaxLength } from 'class-validator';
+import { IsArray, IsOptional, IsString, IsUrl, MaxLength } from 'class-validator';
 import { PostDescriptionMaxLength } from '../post.constant';
 
 export class CreatePostLinkDto {
@@ -26,6 +26,7 @@ export class CreatePostLinkDto {
     description: 'Post tags',
     example: ''
   })
+  @IsArray()
   @Expose()
   public tags?: string[];
 }

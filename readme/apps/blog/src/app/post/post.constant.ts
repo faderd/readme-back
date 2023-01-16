@@ -36,3 +36,10 @@ export enum SortType {
   Like = 'likeUserIds',
   Comment = 'comments'
 }
+
+export const TAGS_NOT_VALID = 'Tags list not valid';
+export const TAGS_MAX_COUNT = 8;
+export const TagLengthRange = {
+  MIN: 3,
+  MAX: 10,
+};

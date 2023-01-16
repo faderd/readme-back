@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsString, MaxLength, MinLength } from 'class-validator';
+import { IsArray, IsString, MaxLength, MinLength } from 'class-validator';
 import { PostAnnouncementLengthRange, PostTextLengthRange, PostTitleLengthRange } from '../post.constant';
 
 export class CreatePostTextDto {
@@ -38,6 +38,7 @@ export class CreatePostTextDto {
     description: 'Post tags',
     example: ''
   })
+  @IsArray()
   @Expose()
   public tags?: string[];
 }

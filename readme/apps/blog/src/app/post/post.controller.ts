@@ -16,6 +16,7 @@ import { ERROR_ACTIONS_OWN_POST } from './post.constant';
 import { PostInfoRdo } from './rdo/post-info.rdo';
 import { CreatePostRdo } from './rdo/create-post.rdo';
 import { PostsCountRdo } from './rdo/post-count.rdo';
+import { TagsValidationPipe } from '../pipes/tags-validation.pipe';
 
 @ApiTags('post')
 @Controller('post')
@@ -33,7 +34,7 @@ export class PostController {
   })
   async createVideo(
     @GetUserFromToken('id') userId: string,
-    @Body() dto: CreatePostVideoDto
+    @Body(TagsValidationPipe) dto: CreatePostVideoDto
   ) {
     dto = fillObject(CreatePostVideoDto, dto);
     const newPost = await this.postService.create(dto, PostType.Video, userId);
@@ -49,7 +50,7 @@ export class PostController {
   })
   async createText(
     @GetUserFromToken('id') userId: string,
-    @Body() dto: CreatePostTextDto
+    @Body(TagsValidationPipe) dto: CreatePostTextDto
   ) {
     dto = fillObject(CreatePostTextDto, dto);
     const newPost = await this.postService.create(dto, PostType.Text, userId);
@@ -65,7 +66,7 @@ export class PostController {
   })
   async createQuote(
     @GetUserFromToken('id') userId: string,
-    @Body() dto: CreatePostQuoteDto
+    @Body(TagsValidationPipe) dto: CreatePostQuoteDto
   ) {
     dto = fillObject(CreatePostQuoteDto, dto);
     const newPost = await this.postService.create(dto, PostType.Quote, userId);
@@ -81,7 +82,7 @@ export class PostController {
   })
   async createPhoto(
     @GetUserFromToken('id') userId: string,
-    @Body() dto: CreatePostPhotoDto
+    @Body(TagsValidationPipe) dto: CreatePostPhotoDto
   ) {
     dto = fillObject(CreatePostPhotoDto, dto);
     const newPost = await this.postService.create(dto, PostType.Photo, userId);
@@ -97,7 +98,7 @@ export class PostController {
   })
   async createLink(
     @GetUserFromToken('id') userId: string,
-    @Body() dto: CreatePostLinkDto
+    @Body(TagsValidationPipe) dto: CreatePostLinkDto
   ) {
     dto = fillObject(CreatePostLinkDto, dto);
     const newPost = await this.postService.create(dto, PostType.Link, userId);
@@ -134,7 +135,7 @@ export class PostController {
   })
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() dto: UpdatePostDto,
+    @Body(TagsValidationPipe) dto: UpdatePostDto,
     @GetUserFromToken('id') userId: string,
   ) {
     const post = await this.postService.getById(id);
