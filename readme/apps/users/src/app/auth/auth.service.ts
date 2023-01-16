@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ClientProxy } from '@nestjs/microservices/client';
 import { createEvent } from '@readme/core';
 import { CommandEvent, UserInterface, UserRole } from '@readme/shared-types';
+import axios from 'axios';
 import dayjs = require('dayjs');
 import { UserEntity } from '../user/user.entity';
 import { UserRepository } from '../user/user.repository';
@@ -12,7 +13,6 @@ import { AUTH_USER_EXISTS, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG, AVATAR
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import axios from 'axios';
 
 @Injectable()
 export class AuthService {
