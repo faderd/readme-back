@@ -1,5 +1,5 @@
 import { Controller, HttpStatus, Param, ParseIntPipe, Post, UseGuards } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { fillObject, GetUserFromToken, JwtAuthGuard } from '@readme/core';
 import { PostRdo } from '../post/rdo/post.rdo';
 import { LikeService } from './like.service';
@@ -13,9 +13,17 @@ export class LikeController {
 
   @Post('/set-like/:id')
   @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
+  })
   @ApiResponse({
     type: PostRdo,
     status: HttpStatus.OK,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User with such login or password not found',
   })
   async setLike(
     @GetUserFromToken('id') userId: string,
@@ -27,9 +35,17 @@ export class LikeController {
 
   @Post('/remove-like/:id')
   @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
+  })
   @ApiResponse({
     type: PostRdo,
     status: HttpStatus.OK,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User with such login or password not found',
   })
   async removeLike(
     @GetUserFromToken('id') userId: string,

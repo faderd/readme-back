@@ -1,5 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common/decorators';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { fillObject } from '@readme/core';
 import { PostRdo } from '../post/rdo/post.rdo';
 import { SearchQuery } from './query/search.query';
@@ -13,6 +13,10 @@ export class SearchController {
   ) { }
 
   @Get('/posts')
+  @ApiOkResponse({
+    type: [PostRdo],
+    description: 'Get posts list',
+  })
   async searchPosts(@Query() query: SearchQuery) {
     const searchResults = await this.searchService.searchPosts(query);
 

@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseFilePipeBuilde
 import { Put, UploadedFile, UseInterceptors } from '@nestjs/common/decorators';
 import { BadRequestException } from '@nestjs/common/exceptions';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiHeader, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiConflictResponse, ApiCreatedResponse, ApiHeader, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { fillObject, GetUserFromToken, JwtAuthGuard, MongoidValidationPipe } from '@readme/core';
 import { AUTH_USER_SUBSCRIBE_YOURSELF, AVATAR_ALLOW_FILE_TYPES, AVATAR_MAX_FILE_SIZE } from './auth.constant';
 import { AuthService } from './auth.service';
@@ -21,10 +21,16 @@ export class AuthController {
   ) { }
 
   @Post('register')
-  @ApiResponse({
+  @HttpCode(HttpStatus.CREATED)
+  @ApiCreatedResponse({
     type: UserRdo,
-    status: HttpStatus.CREATED,
     description: 'The new user has been successfully created.',
+  })
+  @ApiConflictResponse({
+    description: 'User with this email exists',
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad Request',
   })
   async create(@Body() dto: CreateUserDto) {
     const newUser = await this.authService.register(dto);
@@ -33,10 +39,15 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  @ApiResponse({
+  @ApiOkResponse({
     type: LoggedUserRdo,
-    status: HttpStatus.OK,
     description: 'User has been successfully logged.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User with such login or password not found',
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad Request',
   })
   async login(@Body() dto: LoginUserDto) {
     const user = await this.authService.verifyUser(dto);
@@ -44,12 +55,14 @@ export class AuthController {
     return fillObject(LoggedUserRdo, { ...user, accessToken })
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  @ApiResponse({
+  @ApiOperation({ summary: 'Get user info' })
+  @ApiOkResponse({
     type: UserRdo,
-    status: HttpStatus.OK,
     description: 'User found',
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad Request',
   })
   async show(@Param('id', MongoidValidationPipe) id: string) {
     const existUser = await this.authService.getUser(id);
@@ -62,6 +75,9 @@ export class AuthController {
     name: 'Authorization',
     description: 'Bearer token',
     required: true,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User with such login or password not found',
   })
   async changePassword(
     @Param('id', MongoidValidationPipe) id: string,
@@ -91,18 +107,26 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Post('/avatar')
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
+  })
   @UseInterceptors(FileInterceptor('avatar'))
   @ApiHeader({
     name: 'Authorization',
     description: 'Bearer token',
     required: true,
   })
+  @ApiUnauthorizedResponse({
+    description: 'User with such login or password not found',
+  })
   async uploadAvatar(
     @GetUserFromToken('id') userId: string,
     @UploadedFile(
       new ParseFilePipeBuilder()
-        .addFileTypeValidator({fileType: AVATAR_ALLOW_FILE_TYPES})
-        .addMaxSizeValidator({maxSize: AVATAR_MAX_FILE_SIZE})
+        .addFileTypeValidator({ fileType: AVATAR_ALLOW_FILE_TYPES })
+        .addMaxSizeValidator({ maxSize: AVATAR_MAX_FILE_SIZE })
         .build()
     ) file: Express.Multer.File,
   ) {

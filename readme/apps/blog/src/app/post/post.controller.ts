@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { PostService } from './post.service';
 import { PostRdo } from './rdo/post.rdo';
 import { fillObject, GetUserFromToken, JwtAuthGuard, MongoidValidationPipe } from '@readme/core';
@@ -27,10 +27,18 @@ export class PostController {
 
   @Post(`/${PostType.Video}`)
   @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
+  })
   @ApiResponse({
     type: PostRdo,
     status: HttpStatus.CREATED,
     description: 'The new post has been successfully created',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User with such login or password not found',
   })
   async createVideo(
     @GetUserFromToken('id') userId: string,
@@ -43,10 +51,18 @@ export class PostController {
 
   @Post(`/${PostType.Text}`)
   @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
+  })
   @ApiResponse({
     type: PostRdo,
     status: HttpStatus.CREATED,
     description: 'The new post has been successfully created',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User with such login or password not found',
   })
   async createText(
     @GetUserFromToken('id') userId: string,
@@ -59,10 +75,18 @@ export class PostController {
 
   @Post(`/${PostType.Quote}`)
   @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
+  })
   @ApiResponse({
     type: PostRdo,
     status: HttpStatus.CREATED,
     description: 'The new post has been successfully created',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User with such login or password not found',
   })
   async createQuote(
     @GetUserFromToken('id') userId: string,
@@ -75,6 +99,14 @@ export class PostController {
 
   @Post(`/${PostType.Photo}`)
   @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User with such login or password not found',
+  })
   @ApiResponse({
     type: PostRdo,
     status: HttpStatus.CREATED,
@@ -91,10 +123,18 @@ export class PostController {
 
   @Post(`/${PostType.Link}`)
   @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
+  })
   @ApiResponse({
     type: PostRdo,
     status: HttpStatus.CREATED,
     description: 'The new post has been successfully created',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User with such login or password not found',
   })
   async createLink(
     @GetUserFromToken('id') userId: string,
@@ -108,10 +148,18 @@ export class PostController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
+  })
   @ApiResponse({
     type: String,
     status: HttpStatus.OK,
     description: 'Post has been successfully deleted.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User with such login or password not found',
   })
   async delete(
     @GetUserFromToken('id') userId: string,
@@ -128,10 +176,18 @@ export class PostController {
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
+  })
   @ApiResponse({
     type: String,
     status: HttpStatus.OK,
     description: 'Post has been successfully updated.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User with such login or password not found',
   })
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -154,6 +210,9 @@ export class PostController {
     status: HttpStatus.OK,
     description: 'Get posts list',
   })
+  @ApiUnauthorizedResponse({
+    description: 'User with such login or password not found',
+  })
   async getAll(@Query() query: PostQuery) {
     const posts = await this.postService.getAll(query);
 
@@ -162,10 +221,18 @@ export class PostController {
 
   @Get('/drafts')
   @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
+  })
   @ApiResponse({
     type: [PostRdo],
     status: HttpStatus.OK,
     description: 'Get drafts list',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User with such login or password not found',
   })
   async getDrafts(
     @GetUserFromToken('id') userId: string,
@@ -185,10 +252,18 @@ export class PostController {
 
   @Post('/repost/:id')
   @UseGuards(JwtAuthGuard)
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
+  })
   @ApiResponse({
     type: PostInfoRdo,
     status: HttpStatus.CREATED,
     description: 'Repost has been successfully created'
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User with such login or password not found',
   })
   async createRepost(
     @Param('id', ParseIntPipe) postId: number,

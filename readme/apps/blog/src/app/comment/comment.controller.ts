@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiHeader, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { fillObject, GetUserFromToken, JwtAuthGuard } from '@readme/core';
 import { CommentService } from './comment.service';
 import { CommentDto } from './dto/comment.dto';
@@ -14,10 +14,21 @@ export class CommentController {
 
   @UseGuards(JwtAuthGuard)
   @Post('/')
+  @ApiHeader({
+    name: 'Authorization',
+    description: 'Bearer token',
+    required: true,
+  })
   @ApiResponse({
     type: CommentRdo,
     status: HttpStatus.CREATED,
     description: 'The new comment has been successfully created',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'User with such login or password not found',
+  })
+  @ApiBadRequestResponse({
+    description: 'Bad Request',
   })
   async create(
     @GetUserFromToken('id') userId: string,

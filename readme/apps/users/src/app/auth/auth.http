@@ -3,7 +3,7 @@ POST http://localhost:3333/api/auth/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "user1@notfound.local",
+  "email": "user3@notfound.local",
   "firstname": "Keks",
   "lastname": "Smith",
   "password": "123456"
@@ -20,7 +20,7 @@ POST http://localhost:3333/api/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "user2@notfound.local",
+  "email": "user20@notfound.local",
   "password": "123456"
 }
 ###
