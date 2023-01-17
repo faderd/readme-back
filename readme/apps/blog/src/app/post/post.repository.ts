@@ -71,24 +71,11 @@ export class PostRepository implements CRUDRepositoryInterface<PostEntity, numbe
         id: id,
       },
       data: item,
+      include: {
+        _count: { select: { comments: true } }
+      },
     }) as Promise<PostInterface>;
   }
-
-  // public async findByUserId(userId: string, { limit, sortDirection, page, sortType }: PostQuery): Promise<PostInterface[]> {
-
-  //   return this.prisma.post.findMany({
-  //     where: {
-  //       authorId: userId,
-  //       state: PostState.Published,
-  //     },
-  //     take: limit,
-  //     include: {
-  //       comments: true
-  //     },
-  //     orderBy: getOrderByField<SortType, string>(sortType, sortDirection),
-  //     skip: page > 0 ? limit * (page - 1) : undefined,
-  //   }) as Promise<PostInterface[]>;
-  // }
 
   public async findByUserIdAll(userId: string): Promise<PostInterface[]> {
 

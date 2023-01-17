@@ -206,8 +206,6 @@ export class PostController {
   public async getPostsCountByUserId(
     @Param('userId', MongoidValidationPipe) userId: string,
   ) {
-    console.log('controller: ', userId);
-
     const postsCount = await this.postService.getUserPostsCount(userId);
 
     return fillObject(PostsCountRdo, postsCount);

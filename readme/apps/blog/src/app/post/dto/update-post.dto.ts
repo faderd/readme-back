@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray } from 'class-validator';
+import { IsArray, IsOptional } from 'class-validator';
 
 export class UpdatePostDto {
   @ApiProperty({
@@ -7,6 +7,7 @@ export class UpdatePostDto {
     example: ''
   })
   @IsArray()
+  @IsOptional()
   public tags?: string[];
 
   @ApiProperty({

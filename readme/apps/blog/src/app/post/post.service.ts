@@ -57,17 +57,13 @@ export class PostService {
   }
 
   async update(id: number, dto: UpdatePostDto) {
-    const { tags, title, urlVideo, announcement, postText, quoteText, quoteAuthor, photo, link, description } = dto;
-
     const existPost = await this.postRepository.findById(id);
 
     if (!existPost) {
       throw new NotFoundException(POST_NOT_FOUND);
     }
 
-    const post = { tags, title, urlVideo, announcement, postText, quoteText, quoteAuthor, photo, link, description, datePublication: dayjs().toDate(), state: DEFAULT_POST_STATE, isRepost: false, authorId: '', type: existPost.type };
-
-    const postEntity = new PostEntity(post);
+    const postEntity = new PostEntity({ ...existPost, ...dto });
 
     return this.postRepository.update(id, postEntity);
   }
@@ -78,9 +74,6 @@ export class PostService {
 
   async getUserPostsCount(userId: string) {
     const postsCount = await this.postRepository.getUserPostsCount(userId);
-
-    console.log('service: ', userId);
-
 
     const response = {
       postsCount,
