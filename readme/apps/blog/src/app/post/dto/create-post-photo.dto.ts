@@ -1,20 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsArray } from 'class-validator';
+import { IsArray, IsOptional } from 'class-validator';
 
 export class CreatePostPhotoDto {
-  @ApiProperty({
-    description: '',
-    example: '',
-  })
-  @Expose()
-  public photo: string;
-
   @ApiProperty({
     description: 'Post tags',
     example: ''
   })
   @IsArray()
+  @IsOptional()
   @Expose()
   public tags?: string[];
 }

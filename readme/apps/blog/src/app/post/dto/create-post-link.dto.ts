@@ -27,6 +27,7 @@ export class CreatePostLinkDto {
     example: ''
   })
   @IsArray()
+  @IsOptional()
   @Expose()
   public tags?: string[];
 }

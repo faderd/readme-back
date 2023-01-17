@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ClientsModule } from '@nestjs/microservices';
+import { MulterModule } from '@nestjs/platform-express';
+import { getMulterOptions } from '../../config/multer.config';
 import { getRabbitMqConfig } from '../../config/rabbitmq.config';
 import { CommentRepository } from '../comment/comment.repository';
 import { PrismaModule } from '../prisma/prisma.module';
@@ -21,7 +23,10 @@ import { PostService } from './post.service';
         inject: [ConfigService],
       }
     ]),
+    MulterModule.registerAsync({
+      useFactory: getMulterOptions
+    }),
   ],
   exports: [],
 })
-export class PostModule {}
+export class PostModule { }

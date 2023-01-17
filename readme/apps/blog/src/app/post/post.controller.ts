@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, ParseFilePipeBuilder, ParseIntPipe, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiHeader, ApiResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { PostService } from './post.service';
 import { PostRdo } from './rdo/post.rdo';
@@ -12,11 +12,12 @@ import { CreatePostPhotoDto } from './dto/create-post-photo.dto';
 import { CreatePostLinkDto } from './dto/create-post-link.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { BadRequestException } from '@nestjs/common/exceptions';
-import { ERROR_ACTIONS_OWN_POST } from './post.constant';
+import { ERROR_ACTIONS_OWN_POST, PHOTO_ALLOW_FILE_TYPES, PHOTO_MAX_FILE_SIZE } from './post.constant';
 import { PostInfoRdo } from './rdo/post-info.rdo';
 import { CreatePostRdo } from './rdo/create-post.rdo';
 import { PostsCountRdo } from './rdo/post-count.rdo';
 import { TagsValidationPipe } from '../pipes/tags-validation.pipe';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('post')
 @Controller('post')
@@ -112,12 +113,19 @@ export class PostController {
     status: HttpStatus.CREATED,
     description: 'The new post has been successfully created',
   })
+  @UseInterceptors(FileInterceptor('photo'))
   async createPhoto(
     @GetUserFromToken('id') userId: string,
-    @Body(TagsValidationPipe) dto: CreatePostPhotoDto
+    @Body(TagsValidationPipe) dto: CreatePostPhotoDto,
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({fileType: PHOTO_ALLOW_FILE_TYPES})
+        .addMaxSizeValidator({maxSize: PHOTO_MAX_FILE_SIZE})
+        .build()
+    ) file: Express.Multer.File,
   ) {
     dto = fillObject(CreatePostPhotoDto, dto);
-    const newPost = await this.postService.create(dto, PostType.Photo, userId);
+    const newPost = await this.postService.create(dto, PostType.Photo, userId, file);
     return fillObject(CreatePostRdo, newPost);
   }
 

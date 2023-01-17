@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsArray, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsArray, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 import { PostQuoteAuthorLengthRange, PostQuoteLengthRange } from '../post.constant';
 
 export class CreatePostQuoteDto {
@@ -29,6 +29,7 @@ export class CreatePostQuoteDto {
     example: ''
   })
   @IsArray()
+  @IsOptional()
   @Expose()
   public tags?: string[];
 }

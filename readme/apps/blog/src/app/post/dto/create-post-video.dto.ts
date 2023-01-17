@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsArray, IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 import { PostTitleLengthRange } from '../post.constant';
 
 export class CreatePostVideoDto {
@@ -28,6 +28,7 @@ export class CreatePostVideoDto {
     example: ''
   })
   @IsArray()
+  @IsOptional()
   @Expose()
   public tags?: string[];
 }

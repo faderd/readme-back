@@ -43,3 +43,7 @@ export const TagLengthRange = {
   MIN: 3,
   MAX: 10,
 };
+
+export const PHOTO_ALLOW_FILE_TYPES = /jpg|jpeg|png/;
+export const PHOTO_MAX_FILE_SIZE = 1024 * 1000000;
+export const PHOTO_UPLOAD_PATH = 'uploads/photos/';
